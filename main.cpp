@@ -2,6 +2,7 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QLoggingCategory>
+#include <QMutex>
 #include <QObject>
 #include <QStandardPaths>
 
@@ -14,6 +15,9 @@ static std::fstream logFile;
 
 void fileMessageHandler(QtMsgType type, const QMessageLogContext& context,
                         const QString& msg) {
+  static QMutex mutex;
+  QMutexLocker lock(&mutex);
+
   // Log timestamp
   logFile << QDateTime::currentMSecsSinceEpoch() << ' ';
 
